@@ -31,13 +31,16 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         btnGuardar.setOnClickListener {
             val db = Room.databaseBuilder(
                 this@MainActivity,
                 AppDataBase::class.java, "BaseDeDatosI"
-            ).allowMainThreadQueries().build() // ese name --> es el nombre de la base de datos.
+            ).fallbackToDestructiveMigration().allowMainThreadQueries()
+                .build() // ese name --> es el nombre de la base de datos.
             val usuarios = Usuarios(
-                etNombre.text.toString().toInt(),
+                0,
+                etNombre.text.toString(),
                 etUsuario.text.toString(),
                 etPassword.text.toString()
             )
@@ -61,11 +64,11 @@ class MainActivity : AppCompatActivity() {
             val db = Room.databaseBuilder(
                 applicationContext,
                 AppDataBase::class.java, "BaseDeDatosI"
-            ).build()
+            ).allowMainThreadQueries().build()
             val lista: List<Usuarios> = db.usuariosDao().getAll()
             var valores = ""
             for (i in lista.indices) {
-                valores += """${lista[i].getId()}: ${lista[i].nombreUsuario.toString()} usuario: ${lista[i].usuario.toString()} pass: ${lista[i].password.toString()}"""
+                valores += """${lista[i].id}: ${lista[i].nombreUsuario.toString()} usuario: ${lista[i].usuario.toString()} pass: ${lista[i].password.toString()}"""
             }
             etConsulta.setText(valores)
         })
@@ -89,5 +92,8 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
+
 }
 
